@@ -9,7 +9,8 @@ This site is a fan-made website that has no relation with HAL Laboratory and Nin
 If you have any problems about using KSSRs, please contact us(me) on the Discord Server or Twitter.
 
 # 新規プロジェクトの理由
-このプロジェクトは、旧来KSSRs([https://github.com/Appbird/kss-recorders])の改良のために打ち立てられています。
+このプロジェクトは、旧来KSSRs( https://github.com/Appbird/kss-recorders )の改良のために打ち立てられています。
+
 ## 目標とする改善点
 - 旧来KSSRsにあるゲームモードによる分別
   - ゲームモードによるページの分割により、さまざまなゲームの記録を管理するKSSRsで、異なるゲームの記録が混雑しないことを狙った。
@@ -30,20 +31,8 @@ If you have any problems about using KSSRs, please contact us(me) on the Discord
 - アジャイル手法によって実装を進める。
   - フィードバックは実物がない限り得られないと考えたため。
   - 現状開発者本人が狙った仕様が本当にタイムアタックの環境において適切かどうか不明。
-- 言語は日本語のみ
-- ログイン機能なし
-  - (1) 管理者権限操作(記録追記)は、URLを知らない他者がアクセスできないことを安全性の根拠として実装する。
-    - 自動生成されたドキュメントがどう番号付られるかは事前に予測がつかない。
-		- 一応これでも安全！とも言えなくはないが....。
-		- 申請一覧ページを実装するときにどうしてもユーザー権限に関わるシステムは必要。
-		- あとでログインシステムを補強しておく。
-	- (2) 記録に紐づける投稿者はとりあえず一旦なし
-		- あとから一応取り返しつく
-		- ログインシステムを導入した際に、YouTubeとTwitterのアカウントを設定してもらって、
-		- それに従って後からタグを引っ付ける。
-	- (3) 同一者の判定も今は考えない
--	[ルールブック]に関わる機能はなし
-	-	今のところはユーザーに全員ルールの了解があるものとして実装を進める。
+
+
 
 # リンク集
 - KSSRsの専用Discordサーバー  [https://discord.gg/S7u9Cc5vnR]
