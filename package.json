@@ -1,0 +1,19 @@
+{
+  "name": "kirby-speedscore-recorders",
+  "version": "0.0.0",
+  "description": "The application providing scoreboards about the games of the Kirby series and specializing in recording for each segment.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Appbird/kirby-speedscore-recorders.git"
+  },
+  "author": "Appbird",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Appbird/kirby-speedscore-recorders/issues"
+  },
+  "homepage": "https://github.com/Appbird/kirby-speedscore-recorders#readme"
+}
