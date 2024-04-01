@@ -159,13 +159,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "baf1de4339761588bc0619e3cbc0120ee582ebb74b53b4efbf79117bd2da40fd"
 
 [[package]]
-name = "client"
-version = "0.1.0"
-dependencies = [
- "yew",
-]
-
-[[package]]
 name = "console_error_panic_hook"
 version = "0.1.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -909,8 +902,26 @@ dependencies = [
 ]
 
 [[package]]
-name = "kirby-speedscore-recorders"
+name = "kirby-speedscore-recorders_client"
 version = "0.1.0"
+dependencies = [
+ "kssrs_common",
+ "yew",
+]
+
+[[package]]
+name = "kssrs_common"
+version = "0.1.0"
+
+[[package]]
+name = "kssrs_server"
+version = "0.1.0"
+dependencies = [
+ "kssrs_common",
+ "rocket",
+ "serde",
+ "serde_json",
+]
 
 [[package]]
 name = "lazy_static"
@@ -1567,15 +1578,6 @@ dependencies = [
  "itoa",
  "ryu",
  "serde",
-]
-
-[[package]]
-name = "server"
-version = "0.1.0"
-dependencies = [
- "rocket",
- "serde",
- "serde_json",
 ]
 
 [[package]]

@@ -1,5 +1,5 @@
 [package]
-name = "client"
+name = "kirby-speedscore-recorders_client"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,3 +7,4 @@ edition = "2021"
 
 [dependencies]
 yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
+kssrs_common = { path = "../common" }
