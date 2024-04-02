@@ -8,9 +8,13 @@ use serde_json;
 
 
 #[derive(Serialize, Deserialize)]
-struct DataBase {
-    objective: i32
+struct DataTuple {
+    A: i32,
+    B: String
 }
+
+#[derive(Serialize, Deserialize)]
+struct DataBase (Vec<DataTuple>);
 
 fn generate_internal_server_error(errmsg:String) -> status::Custom<content::RawText<String>> {
     status::Custom(
@@ -25,7 +29,7 @@ fn generate_result_response(data:String) -> status::Custom<content::RawText<Stri
     )
 }
 
-#[get("/")]
+#[get("/hello")]
 fn index() -> status::Custom<content::RawText<String>> {
     let data = match fs::read_to_string("./server/db/data.json") {
         Ok(d) => d,
@@ -35,7 +39,12 @@ fn index() -> status::Custom<content::RawText<String>> {
         Ok(d) => d,
         Err(e) => return generate_internal_server_error(format!("failed to find objective in json file. {}", e)),
     };
-    return generate_result_response(db.objective.to_string());
+    let filtered:Vec<&DataTuple> = db.0.iter().filter(|e|  e.A <= 12 ).collect();
+    let filtered_json = match serde_json::to_string(&filtered) {
+        Ok(d) => d,
+        Err(e) => return generate_internal_server_error(format!("failed to convert result into JSON. {}", e)),
+    };
+    return generate_result_response(filtered_json);
 }
 
 #[launch]
