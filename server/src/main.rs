@@ -1,12 +1,12 @@
 use std::fs;
-use rocket::{http::Status, response::{content, status}};
+use rocket::{fs::FileServer, http::Status, response::{content, status}};
 use serde::{Serialize, Deserialize};
 use serde_json;
 
 #[macro_use] extern crate rocket;
 
 
-
+#[allow(non_snake_case)]
 #[derive(Serialize, Deserialize)]
 struct DataTuple {
     A: i32,
@@ -47,7 +47,20 @@ fn index() -> status::Custom<content::RawText<String>> {
     return generate_result_response(filtered_json);
 }
 
+#[get("/search?<query>")]
+fn search(query:Vec<&str>) -> status::Custom<content::RawText<String>> {
+    for q in query {
+        println!("{}", q);
+    }
+    return generate_result_response("responded.".to_string());
+}
+
 #[launch]
 fn rocket() -> _ {
-    rocket::build().mount("/", routes![index])
+    rocket::build()
+    .mount("/api", routes![
+        index,
+        search
+    ])
+    .mount("/", FileServer::from("./client/static/").rank(2))
 }

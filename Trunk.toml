@@ -1,0 +1,4 @@
+[build]
+target = "./client/index.html"
+dist = "./client/static/dist"
+public_url = "/dist/"
