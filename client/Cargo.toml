@@ -10,6 +10,7 @@ yew = { git = "https://github.com/yewstack/yew/", features = ["csr"] }
 kssrs_common = { path = "../common" }
 
 gloo-net = "0.2"
+gloo-timers = "0.3.0"
 web-sys = { version = "0.3", features = ["Event","EventTarget","InputEvent"] }
 wasm-bindgen = "0.2"
 wasm-bindgen-futures = "0.4"

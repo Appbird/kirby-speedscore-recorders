@@ -926,6 +926,7 @@ name = "kssrs_client"
 version = "0.1.0"
 dependencies = [
  "gloo-net 0.2.6",
+ "gloo-timers 0.3.0",
  "kssrs_common",
  "wasm-bindgen",
  "wasm-bindgen-futures",
