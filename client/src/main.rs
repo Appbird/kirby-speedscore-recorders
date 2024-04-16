@@ -1,9 +1,10 @@
 use gloo_net::http::Request;
-use gloo_net::websocket;
 use gloo_timers::callback::Interval;
+use gloo_timers::callback::Timeout;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::UnwrapThrowExt;
 use web_sys::HtmlInputElement;
+use web_sys::Text;
 use yew::prelude::*;
 use wasm_bindgen_futures;
 use std::future::Future;
@@ -22,39 +23,58 @@ fn get_value_from_input_event(e: InputEvent) -> String {
     target.value()
 }
 
-
-
-#[function_component]
-fn App() -> Html {
-    let time = use_state(|| 0);
-    let input_value = use_state(|| String::new());
-    
-    let time_ref = time.clone();
-    let input_value_ref = input_value.clone();
-
-    // FIXED: updateされるたびに複数回intervalが作られてしまって困る
-    let interval = Interval::new(100, move || { 
-        let input_value_cloned = input_value.clone();
-        if *time > 0 { time.set(*time - 100); }
-        if *time == 0 {
-            wasm_bindgen_futures::spawn_local(async move {
-                send_api_request(&*input_value_cloned).await.unwrap_throw();
-            });
-        }
-        web_sys::console::log_1(&(*time).to_string().into());
-    });
-    interval.forget();
-
-    // FIXME ここのムーブの問題どうする？
-    let oninput = Callback::from(move |input_event: InputEvent| {
-        let value = get_value_from_input_event(input_event);
-        time_ref.set(600);
-        input_value_ref.set(value.clone());
-    });
-    html!( 
-        <input type={"text"}  {oninput}/>
-    )
+struct App {
+    timeout: Option<Timeout>,
+    input_value: String
 }
+enum Msg {
+    UpdateText(String),
+    DispatchEvent,
+}
+
+impl App {
+    fn update_text(&mut self, ctx: &Context<Self>, s:String){
+        self.input_value = s;
+        self.timeout = Some(Timeout::new(600, || {
+            ctx.link().callback(|_:InputEvent| Msg::DispatchEvent);
+        }));
+    }
+    fn delay_dispatch(&self) {
+        wasm_bindgen_futures::spawn_local(async move {
+            send_api_request(&self.input_value).await.unwrap_throw();
+        })
+    }
+}
+
+impl Component for App {
+    type Message = Msg;
+
+    type Properties = ();
+
+    fn create(_ctx: &Context<Self>) -> Self {
+        Self {
+            timeout: None,
+            input_value : String::new(),
+        }
+    }
+    fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+        match msg {
+            Msg::UpdateText(x) => self.update_text(ctx, x),
+            Msg::DispatchEvent => self.delay_dispatch()
+        };
+        true
+    }
+    fn view(&self, ctx: &Context<Self>) -> Html {
+        let input = |input_event| {
+            let s = get_value_from_input_event(input_event);
+            Msg::UpdateText(s)
+        };
+        html!( 
+            <input type={"text"}  oninput={ctx.link().callback(input)}/>
+        )
+    }
+}
+
 fn main() {
     yew::Renderer::<App>::new().render();
 }
