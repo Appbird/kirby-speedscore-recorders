@@ -1,10 +1,8 @@
 use gloo_net::http::Request;
-use gloo_timers::callback::Interval;
 use gloo_timers::callback::Timeout;
 use wasm_bindgen::JsCast;
 use wasm_bindgen::UnwrapThrowExt;
 use web_sys::HtmlInputElement;
-use web_sys::Text;
 use yew::prelude::*;
 use wasm_bindgen_futures;
 use std::future::Future;
@@ -24,24 +22,24 @@ fn get_value_from_input_event(e: InputEvent) -> String {
 }
 
 struct App {
-    timeout: Option<Timeout>,
-    input_value: String
+    timeout: Option<Timeout>
 }
 enum Msg {
     UpdateText(String),
-    DispatchEvent,
+    DispatchEvent(String),
 }
+
 
 impl App {
     fn update_text(&mut self, ctx: &Context<Self>, s:String){
-        self.input_value = s;
-        self.timeout = Some(Timeout::new(600, || {
-            ctx.link().callback(|_:InputEvent| Msg::DispatchEvent);
+        let link = ctx.link().clone();
+        self.timeout = Some(Timeout::new(600, move || {
+            link.send_message(Msg::DispatchEvent(s));
         }));
     }
-    fn delay_dispatch(&self) {
+    fn delay_dispatch(&self, x:String) {
         wasm_bindgen_futures::spawn_local(async move {
-            send_api_request(&self.input_value).await.unwrap_throw();
+            send_api_request(&x).await.unwrap_throw();
         })
     }
 }
@@ -53,14 +51,16 @@ impl Component for App {
 
     fn create(_ctx: &Context<Self>) -> Self {
         Self {
-            timeout: None,
-            input_value : String::new(),
+            timeout: None
         }
     }
     fn update(&mut self, ctx: &Context<Self>, msg: Self::Message) -> bool {
+        
         match msg {
             Msg::UpdateText(x) => self.update_text(ctx, x),
-            Msg::DispatchEvent => self.delay_dispatch()
+            Msg::DispatchEvent(x) => {
+                self.delay_dispatch(x)
+            }
         };
         true
     }
